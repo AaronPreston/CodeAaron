@@ -1,0 +1,225 @@
+<!DOCTYPE HTML>
+<html>
+
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>CodeAaron</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <link href="https://fonts.googleapis.com/css?family=Roboto|Bangers|Carter+One" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
+
+        <style>
+
+        img {
+            transition: all 0.2s ease;
+        }
+        
+        hr {
+            height: 2px;
+            color: #777777;
+            background: #8a8a8a;
+            font-size: 0;
+            box-shadow: 0px 1px #6b6b6b;
+            border-radius: 100px;
+            border: 0;
+        }
+
+        #blog-header {
+            background-color: #ffffff;
+            border: 1px solid #a5a5a547;
+            box-shadow: 0px 0px 20px #90909059;
+            margin-bottom: 5%;
+            margin-left: 10%;
+            margin-right: 10%;
+            margin-top: 4%;
+            /*font-family: 'Carter One', cursive;*/
+        }
+
+        .blog-post {
+            background-color: #ffffff;
+            padding: 1px 16px 16px 16px;
+            border: 1px solid #a5a5a547;
+            box-shadow: 0px 0px 20px #90909059;
+            margin-bottom: 5%;
+        }
+
+        </style>
+        
+    </head>
+    <body>
+        
+        <div id='main-panel' class='content-panel'>
+
+            <div id='blog-header'>
+                <strong></strong><h1 style='font-size:40px;text-align:center;'> Blog </h1></strong>
+            </div>
+            
+            <div id='textoutput' class='inner-content-panel'>
+
+            </div>
+
+            <hr />
+
+            <p id='footer'></p>
+
+            <script language="JavaScript">
+                document.body.getElementById("footer").style.textAlign = "center";
+                document.getElementById("footer").innerHTML = "©" + new Date().getFullYear() + " Aaron Preston; CodeAaron.com. <br>All rights reserved."
+            </script>
+
+        </div>
+
+        <script type='text/javascript'>
+
+            var imageOpen = [],
+                postOpen = [];
+
+            String.prototype.replaceAll = function (find, replace) {
+                var str = this;
+                return str.replace(new RegExp(find, 'g'), replace);
+            };
+
+            window = {
+                orientation: "Wide"
+            };
+
+            var qualityCheck = setInterval(function() {
+                if(window.innerHeight > window.innerWidth) {
+                    document.getElementById("main-panel").style.left = "0";
+                    document.getElementById("main-panel").style.right = "0";
+                    window.orientation = "Tall";
+                } else {
+                    document.getElementById("main-panel").style.left = "15%";
+                    document.getElementById("main-panel").style.right = "15%";
+                    window.orientation = "Wide";
+                }
+                if(window.innerHeight < (window.innerWidth / 2)) {
+                    document.getElementById("main-panel").style.left = "25%";
+                    document.getElementById("main-panel").style.right = "25%";
+                }
+            }, 16);
+
+            function imageSelect(id) {
+                /*var images = document.getElementsByTagName("img");
+                
+				
+				for(x = 0; x < images.length; x++) {
+					if(images[x].id == id && !imageOpen[x]) { // Open image
+                        images[x].style.marginLeft = "-10%";
+                        images[x].style.marginTop = "-10%";
+						images[x].style.width = "120%";
+						images[x].style.height = "120%";
+						imageOpen[x] = !imageOpen[x];
+					} else if(images[x].id == id && imageOpen[x]) { // Close image
+						images[x].style.width = "100%";
+                        images[x].style.height = "100%";
+                        images[x].style.marginLeft = "0%";
+                        images[x].style.marginTop = "0%";
+						imageOpen[x] = !imageOpen[x];
+					}
+				}*/
+            }
+            
+            function postSelect(id) {
+                var posts = document.getElementsByClassName("blog-post");
+                var images = document.getElementsByTagName("img");
+
+                for(x = 0; x < posts.length; x++) {
+					if(posts[x].id == id && !postOpen[x]) { // Open post
+                        posts[x].style.position = "fixed";
+                        posts[x].style.left = "-8px";
+                        posts[x].style.top = "-8px";
+                        posts[x].style.width = "100%";
+                        posts[x].style.height = "100%";
+                        posts[x].style.overflowY = "scroll";
+                        document.body.style.overflow = "hidden";
+                        
+                        for(i = 0; i < images.length; i++) {
+                            images[i].style.width = "50%";
+                            images[i].style.height = "50%";
+
+                            if(window.orientation = "Tall") {
+                                images[i].style.width = "80%";
+                                images[i].style.height = "80%";
+                            }
+                        }
+                        
+						postOpen[x] = true;
+					} else if(posts[x].id == id && postOpen[x]) { // Close post
+                        posts[x].style.position = "static";
+                        posts[x].style.left = "";
+                        posts[x].style.top = "";
+                        posts[x].style.width = "";
+                        posts[x].style.height = "";
+                        posts[x].style.overflowY = "";
+                        document.body.style.overflow = "";
+
+                        for(i = 0; i < images.length; i++) {
+                            images[i].style.width = "100%";
+                            images[i].style.height = "100%";
+                        }
+                        
+						postOpen[x] = false;
+					}
+                }
+            }
+
+            var getXML = new XMLHttpRequest();
+            getXML.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("textoutput").innerHTML = getXML.responseText;
+
+                    xmlDoc = getXML.responseXML;
+                    xmlText = "";
+
+                    titles = xmlDoc.getElementsByTagName("title");
+                    dates = xmlDoc.getElementsByTagName("date");
+                    authors = xmlDoc.getElementsByTagName("author");
+                    tags = xmlDoc.getElementsByTagName("tags");
+                    content = xmlDoc.getElementsByTagName("content");
+
+
+                    for (i = titles.length - 1; i >= 0; i--) {
+                        content[i].childNodes[0].nodeValue = (content[i].childNodes[0].nodeValue).replaceAll("``n", "<br/>");
+
+                        content[i].childNodes[0].nodeValue = (content[i].childNodes[0].nodeValue).replaceAll("``img", "<img id='image-id-" + Math.floor(Math.random() * 9999999999) + "' src='");
+                        
+                        content[i].childNodes[0].nodeValue = (content[i].childNodes[0].nodeValue).replaceAll("/img``", "' alt='Photo' width='100%' height='100%' ondblclick='imageSelect(this.id)' />");
+
+                        content[i].childNodes[0].nodeValue = (content[i].childNodes[0].nodeValue).replaceAll("``b", "<strong>");
+                        content[i].childNodes[0].nodeValue = (content[i].childNodes[0].nodeValue).replaceAll("/b``", "</strong>");
+
+                        content[i].childNodes[0].nodeValue = (content[i].childNodes[0].nodeValue).replaceAll("``i", "<i>");
+                        content[i].childNodes[0].nodeValue = (content[i].childNodes[0].nodeValue).replaceAll("/i``", "</i>");
+                        
+                        content[i].childNodes[0].nodeValue = (content[i].childNodes[0].nodeValue).replaceAll("``a", "<a href='");
+                        content[i].childNodes[0].nodeValue = (content[i].childNodes[0].nodeValue).replaceAll("``href", "'>");
+                        content[i].childNodes[0].nodeValue = (content[i].childNodes[0].nodeValue).replaceAll("/a``", "</a>");
+
+                        xmlText += "<div id='" + i +"' class='blog-post' ondblclick='postSelect(this.id)'> <h1>" + titles[i].childNodes[0].nodeValue + "</h1>" +
+                                    "<h5 style='margin-top: -16px;margin-bottom: 6px;'>" + dates[i].childNodes[0].nodeValue +
+                                    ", " + authors[i].childNodes[0].nodeValue +
+                                    "<br/> [" + tags[i].childNodes[0].nodeValue + "]</h5>" +
+                                    "<hr/><p style='font-size=12px'>" + content[i].childNodes[0].nodeValue + "</p></div>";
+
+                    }
+                    document.getElementById("textoutput").innerHTML = xmlText;
+                }
+            };
+            getXML.open("GET", "Data.xml", true);
+            getXML.send();
+
+            document.body.onload = function() {
+                
+                var url = new URL(window.location.href);
+                var id = url.searchParams.get("id");
+                
+                setTimeout(function() {
+                    postSelect(id)
+                }, 200);
+            }
+        </script>
+    </body>
+
+</html>
